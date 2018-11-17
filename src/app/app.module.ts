@@ -13,10 +13,13 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [AppComponent, MenuLayoutComponent, AccountsComponent, SignInComponent],
   imports: [
+    FormsModule,
+    ReactiveFormsModule,
     RouterModule.forRoot(routes, { useHash: true }), 
     BrowserModule,
     AngularFireModule.initializeApp(environment.firebase),

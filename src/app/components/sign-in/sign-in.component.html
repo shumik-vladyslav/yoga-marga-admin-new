@@ -1,3 +1,17 @@
-<p>
-  sign-in works!
-</p>
+<div class="login-page">
+    <div class="form">
+      <!-- <form class="register-form">
+        <input type="text" placeholder="name"/>
+        <input type="password" placeholder="password"/>
+        <input type="text" placeholder="email address"/>
+        <button>create</button>
+        <p class="message">Already registered? <a href="#">Sign In</a></p>
+      </form> -->
+      <form class="login-form" [formGroup]="form">
+        <input type="email" placeholder="почта" formControlName="email" />
+        <input type="password" placeholder="пароль" formControlName="password" />
+        <button  (click)="onSignIn()">Войти</button>
+        <!-- <p class="message">Not registered? <a href="#">Create an account</a></p> -->
+      </form>
+    </div>
+  </div>
