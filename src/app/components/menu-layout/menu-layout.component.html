@@ -14,11 +14,13 @@
               <li><a href="admin-groups.html">Управление группами</a></li>
             </ul>							
           </li>						
-          <li><a href=""><img src="assets/images/design/icon-nav2.svg" alt="">Каталог</a>
+          <li><a [routerLink]="['/practices', '']" routerLinkActive="active-link" ><img src="assets/images/design/icon-nav2.svg" alt="">Каталог</a>
             <ul>
-              <li><a href="">Утренние практики</a></li>
-              <li><a href="">Медитативные практики</a></li>
-              <li><a href="">Вечерние практики</a></li>
+              <li><a [routerLink]="['/practices', 'Утренние практики']" routerLinkActive="active-link">Утренние практики</a></li>
+              <li><a [routerLink]="['/practices', 'Медитативные практики']" routerLinkActive="active-link">Медитативные практики</a></li>
+              <li><a [routerLink]="['/practices', 'Вечерние практики']" routerLinkActive="active-link">Вечерние практики</a></li>
+              <li><a [routerLink]="['/practices', 'Ритуальные практики']" routerLinkActive="active-link">Ритуальные практики</a></li>
+              <li><a [routerLink]="['/practices', 'Ритритные практики']" routerLinkActive="active-link">Ритритные практики</a></li>
             </ul>
           </li>
           <li><a href=""><img src="assets/images/design/icon-nav3.svg" alt="">Оповещения</a>

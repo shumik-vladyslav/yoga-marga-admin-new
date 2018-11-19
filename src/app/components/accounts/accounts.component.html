@@ -1,57 +1,70 @@
 <div class="wrap-content">
-    <div class="head-content">
-      <p>Учетные записи</p>
+  <div class="head-content"><p>Учетные записи</p></div>
+  <!--
+    full_name: "Ом Драм"
+    gender: "m"
+    id: "vxVmS3rf8eSaQBBbfB1n2BcT7wo2"
+    phone: "+79087330829"
+    practices: {mahashava-mudra: {…}}
+    spiritual_name: "Ананта Натх Гири"
+    status: "purna-sanyasy"
+  -->
+  <div class="body-content">
+    <table>
+      <thead>
+        <tr>
+          <td>№</td>
+          <td>Духовное имя</td>
+          <td>ФИО</td>
+          <td>Статус</td>
+          <td>E-mail</td>
+          <td>Телефон</td>
+          <td>Дата регистрации</td>
+          <!-- <td>Время использования приложения</td> -->
+          <td>Группа пользователей
+            <button class="blue" (click)="onNewGroup()">Создать</button>
+          </td>
+          <td>Активация/Деактивация</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let u of users; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ u.spiritual_name }}</td>
+          <td>{{ u.full_name }}</td>
+          <td>{{ u.status }}</td>
+          <td>{{ u.email }}</td>
+          <td>{{ u.phone }}</td>
+          <td>{{ u.created }}</td>
+          <!-- <td></td> -->
+          <td>
+            <select [ngModel]="u.group" (change)="onGroupChange($event.target.value)">
+              <!-- <option value="new" (click)="">Создать группу</option> -->
+              <option [value]="g.name" *ngFor="let g of (groups$ | async)">{{ g.name }}</option>
+            </select>
+          </td>
+          <td>
+            <label class="checkbox"
+              ><input
+                type="checkbox"
+                [checked]="u.active"
+                (change)="onUserActiveChange(u, $event.target.checked)"/>
+              <div class="checkbox__text"></div
+            ></label>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- The Modal -->
+<div id="myModal" class="modal" #modal>
+
+    <!-- Modal content -->
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <p>Some text in the Modal..</p>
     </div>
-    <div class="body-content">
-      <table>
-        <thead>
-          <tr>
-            <td>№</td>
-            <td>Духовное имя</td>
-            <td>ФИО</td>
-            <td>Статус</td>
-            <td>E-mail</td>
-            <td>Телефон</td>
-            <td>Дата регистрации</td>
-            <td>Время использования приложения</td>
-            <td>Группа пользователей</td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>1</td>
-            <td>Сатья</td>
-            <td>Иванова Светлана Сергеевна</td>
-            <td>кандидат в ученики</td>
-            <td>ivanova@gmail.com</td>
-            <td>8(908)123-45-67</td>
-            <td>12.01.2019</td>
-            <td>1 год 3 мес.</td>
-            <td>группа №3</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Сатья</td>
-            <td>Иванова Светлана Сергеевна</td>
-            <td>кандидат в ученики</td>
-            <td>ivanova@gmail.com</td>
-            <td>8(908)123-45-67</td>
-            <td>12.01.2019</td>
-            <td>1 год 3 мес.</td>
-            <td>группа №3</td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>Сатья</td>
-            <td>Иванова Светлана Сергеевна</td>
-            <td>кандидат в ученики</td>
-            <td>ivanova@gmail.com</td>
-            <td>8(908)123-45-67</td>
-            <td>12.01.2019</td>
-            <td>1 год 3 мес.</td>
-            <td>группа №3</td>
-          </tr>
-        </tbody>	
-      </table>
-    </div>
+  
   </div>

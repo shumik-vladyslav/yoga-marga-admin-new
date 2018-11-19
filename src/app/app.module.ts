@@ -14,9 +14,10 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { PracticesComponent } from './components/practices/practices.component';
 
 @NgModule({
-  declarations: [AppComponent, MenuLayoutComponent, AccountsComponent, SignInComponent],
+  declarations: [AppComponent, MenuLayoutComponent, AccountsComponent, SignInComponent, PracticesComponent],
   imports: [
     FormsModule,
     ReactiveFormsModule,
@@ -24,7 +25,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     BrowserModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
-    AngularFirestoreModule.enablePersistence(),
+    AngularFirestoreModule,
     AngularFireStorageModule,
   ],
   providers: [],

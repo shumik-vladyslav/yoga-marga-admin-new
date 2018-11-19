@@ -1,25 +1,31 @@
 import { Injectable } from "@angular/core";
 import { AngularFireAuth } from "@angular/fire/auth";
+import { User } from "firebase";
+import { Router } from "@angular/router";
 
 @Injectable({
   providedIn: "root"
 })
 export class AuthService {
-  public user: firebase.auth.UserCredential;
-  constructor(public afAuth: AngularFireAuth) {
-  }
+  public user: User;
 
-  signIn(email: string, password: string): Promise<firebase.auth.UserCredential>{
-    return this.afAuth.auth.signInWithEmailAndPassword(email,password).then(
-      user => this.user = user
+  constructor(public afAuth: AngularFireAuth, private router: Router) {
+    this.afAuth.authState.subscribe(
+      (user: User) => {
+        this.user = user;
+        this.router.navigate(['/']);
+      },
+      err => {
+        console.log(err);
+        this.router.navigate(['/sign-in']);
+      }
     )
   }
 
-  // public user():Promise<firebase.auth.UserCredential> {
-  //   if(this._user) {
-  //     return Promise.resolve(this._user);
-  //   } else {
+  signIn(email: string, password: string): Promise<User>{
+    return this.afAuth.auth.signInWithEmailAndPassword(email,password).then(
+      (user:firebase.auth.UserCredential) => this.user = user.user
+    )
+  }
 
-  //   }
-  // }
 }

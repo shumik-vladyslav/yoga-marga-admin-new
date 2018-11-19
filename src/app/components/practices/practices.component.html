@@ -1,0 +1,47 @@
+<div class="wrap-content">
+  <div class="head-content"><p>Практики</p></div>
+  <div class="body-content">
+    <table>
+      <thead>
+          <!-- ico: "/assets/icon/svg/main-page/om.svg"
+          id: "om"
+          isAmountCounter: true
+          name: "Мантра Ом"
+          shortDescription: "<p>Брахман выше всего, а Ом – Его имя. </p> <p>Поэтому следует почитать звук Ом. Ом – это все. Ом – это имя или символ Бога, Ишвары, Брахмана. Ом – это ваше истинное имя. Ом покрывает все три части человеческого опыта. За всеми воспринимаемыми словами стоит Ом. Весь воспринимаемый чувствами мир возник из звука Ом. В нем мир существует, и в нем растворяется. Мантра Ом включает в себя буквы «а», «у», «м».</p>"
+          template: 2
+          type: "Медитативные практики"
+          yantra: "Праджня-янтра" -->
+        <tr>
+          <td>№</td>
+          <td>Название</td>
+          <td>Иконка</td>
+          <td>Группы</td>
+          <td>Счетчик колличества</td>
+          <td>Максимальное достижение</td>
+          <td>Дата обновления</td>
+          <td>Активация/Деактивация</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of practices; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ p.name }}</td>
+          <td><img [src]="p.ico"></td>
+          <td>{{p.groups}}</td>
+          <td style="text-align: center" [innerHtml]="p.isAmountCounter?'&#x2714;':''"></td>
+          <td style="text-align: center" [innerHtml]="p.isMaxAchievement?'&#x2714;':''"></td>
+          <td>{{p.updated_date}}</td>
+          <td>
+            <label class="checkbox"
+              ><input
+                type="checkbox"
+                [checked]="p.active"
+                (change)="onPracticeActiveChange(p, $event.target.checked)"/>
+              <div class="checkbox__text"></div
+            ></label>
+          </td> 
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
