@@ -15,9 +15,10 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PracticesComponent } from './components/practices/practices.component';
+import { PracticeModalComponent } from './components/practice-modal/practice-modal.component';
 
 @NgModule({
-  declarations: [AppComponent, MenuLayoutComponent, AccountsComponent, SignInComponent, PracticesComponent],
+  declarations: [AppComponent, MenuLayoutComponent, AccountsComponent, SignInComponent, PracticesComponent, PracticeModalComponent],
   imports: [
     FormsModule,
     ReactiveFormsModule,

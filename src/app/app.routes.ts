@@ -1,3 +1,4 @@
+import { PracticeModalComponent } from './components/practice-modal/practice-modal.component';
 import { PracticesComponent } from './components/practices/practices.component';
 import { AccountsComponent } from "./components/accounts/accounts.component";
 import { Component } from "@angular/core";
@@ -23,7 +24,12 @@ export const routes: Routes = [
       },
       {
         path: "",
-        component: AccountsComponent,
+        component: PracticeModalComponent,
+        canActivate: [AppGuard]
+      },
+      {
+        path: "practice-modal",
+        component: PracticeModalComponent,
         canActivate: [AppGuard]
       }
     ]
