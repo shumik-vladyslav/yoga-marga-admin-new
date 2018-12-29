@@ -1,4 +1,5 @@
 <div class="wrap-content">
+   
   <div class="head-content"><p>Учетные записи</p></div>
   <!--
     full_name: "Ом Драм"
@@ -19,7 +20,7 @@
           <td>Статус</td>
           <td>E-mail</td>
           <td>Телефон</td>
-          <td>Дата регистрации</td>
+          <!-- <td>Дата регистрации</td> -->
           <!-- <td>Время использования приложения</td> -->
           <td>Группа пользователей
             <button class="blue" (click)="onNewGroup()">Создать</button>
@@ -35,22 +36,28 @@
           <td>{{ u.status }}</td>
           <td>{{ u.email }}</td>
           <td>{{ u.phone }}</td>
-          <td>{{ u.created }}</td>
-          <!-- <td></td> -->
+          <!-- <td>{{ u.created }}</td> -->
           <td>
-            <select [ngModel]="u.group" (change)="onGroupChange($event.target.value)">
-              <!-- <option value="new" (click)="">Создать группу</option> -->
+              <!-- (change)="onGroupChange(u, $event.target.value)"  -->
+            <app-chips [chips]="(groups$ | async)" [ngModel]="u.groups" 
+            (ngModelChange)="onGroupChange(u, $event)" (ngModel)="u.selectedGroups">
+           
+            </app-chips>
+            <!-- <pre>{{tmp}}</pre> -->
+             <!-- [(ngModel)]="tmp"> -->
+            <!-- <select [ngModel]="u.group" (change)="onGroupChange(u, $event.target.value)">
+              <option value="new"></option>
               <option [value]="g.name" *ngFor="let g of (groups$ | async)">{{ g.name }}</option>
-            </select>
+            </select> -->
           </td>
           <td>
-            <label class="checkbox"
-              ><input
+            <label class="checkbox">
+              <input
                 type="checkbox"
                 [checked]="u.active"
                 (change)="onUserActiveChange(u, $event.target.checked)"/>
-              <div class="checkbox__text"></div
-            ></label>
+              <div class="checkbox__text"></div>
+            </label>
           </td>
         </tr>
       </tbody>

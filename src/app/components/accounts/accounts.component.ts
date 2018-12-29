@@ -1,7 +1,10 @@
+import { PracticeModalComponent } from './../practice-modal/practice-modal.component';
+import { FullModalService } from './../full-modal/full-modal.service';
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Subscription } from 'rxjs';
 import { devModeEqual } from '@angular/core/src/change_detection/change_detection';
+import { map,take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-accounts',
@@ -13,15 +16,18 @@ export class AccountsComponent implements OnInit, OnDestroy {
   subscriptions: Subscription = new Subscription();
   users;
   groups$;
-  constructor(private fireStore: AngularFirestore) { }
+  tmp;
+  constructor(private fireStore: AngularFirestore, public modalService: FullModalService) { }
 
   ngOnInit() {
-    this.groups$ = this.fireStore.collection('groups').valueChanges();
+    console.log('init');
+    this.groups$ = this.fireStore.collection('groups').valueChanges().pipe(map(
+      gr => gr.map((g: any) => g.name)
+    ),take(1));
     const subs = this.fireStore.collection('users').valueChanges().subscribe(
       users => {
         this.users = users;
-        console.log(users);
-        console.log(JSON.stringify(users));
+        console.log('users', users);
       }
     )
     this.subscriptions.add(subs);
@@ -39,23 +45,24 @@ export class AccountsComponent implements OnInit, OnDestroy {
     const name = prompt('Введите название группы');
       if (name && name != '') {
         this.fireStore.doc('groups/' + name).set({name: name}).then(
-          res => console.log(res)
+          res => {
+
+            console.log(res);
+          }
         )
       }
   }
 
-  onGroupChange(group) {
-    console.log(group);
-    if (group= 'new') {
-      // console.log(new);
-      // this.modal.nativeElement.style.display = "block";
-      
-    }
+  onGroupChange(user, e) {
+    console.log(user,e);
+    this.fireStore.doc('users/' + user.email).update({groups:e}).then(
+      res => console.log(res)
+    )
   }
 
   onUserActiveChange(user, state) {
     console.log(user, event);
-    this.fireStore.doc('users/' +user.email).update({active: state}).then(
+    this.fireStore.doc('users/' + user.email).update({active: state}).then(
       res => console.log(res)
     )
   }

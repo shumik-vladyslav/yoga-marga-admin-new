@@ -1,0 +1,2 @@
+<button *ngFor="let c of chips" [class.active]="selected[c]"
+(click)="onChipClick(c)">{{c}}</button>

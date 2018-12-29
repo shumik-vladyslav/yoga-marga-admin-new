@@ -6,6 +6,8 @@ import { MenuLayoutComponent } from "./components/menu-layout/menu-layout.compon
 import { Routes } from "@angular/router";
 import { SignInComponent } from "./components/sign-in/sign-in.component";
 import { AppGuard } from "./app.guard";
+import { GroupsComponent } from './components/groups/groups.component';
+import { NotificationComponent } from './components/notification/notification.component';
 
 export const routes: Routes = [
   {
@@ -18,18 +20,28 @@ export const routes: Routes = [
         canActivate: [AppGuard]
       },
       {
+        path: "groups",
+        component: GroupsComponent,
+        canActivate: [AppGuard]
+      },
+      {
         path: "practices/:type",
         component: PracticesComponent,
         canActivate: [AppGuard]
       },
       {
-        path: "",
+        path: "modal",
         component: PracticeModalComponent,
         canActivate: [AppGuard]
       },
       {
         path: "practice-modal",
         component: PracticeModalComponent,
+        canActivate: [AppGuard]
+      },
+      {
+        path: "notifications",
+        component: NotificationComponent,
         canActivate: [AppGuard]
       }
     ]

@@ -1,3 +1,6 @@
+import { PracticeModalComponent } from './../practice-modal/practice-modal.component';
+import { FullModalService } from './../full-modal/full-modal.service';
+import { FullModalComponent } from './../full-modal/full-modal.component';
 import { Subscription } from 'rxjs';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
@@ -13,7 +16,8 @@ export class PracticesComponent implements OnInit, OnDestroy {
   practices;
   unfilteredPractices;
   subscriptions: Subscription = new Subscription();
-  constructor(private fireStore: AngularFirestore, private route: ActivatedRoute) { 
+  constructor(private fireStore: AngularFirestore, private route: ActivatedRoute, 
+    private modalService: FullModalService) { 
       const subs = this.fireStore.collection('practices').valueChanges().subscribe(
         pr => {
           this.unfilteredPractices = pr;
@@ -51,5 +55,13 @@ export class PracticesComponent implements OnInit, OnDestroy {
     this.fireStore.doc('practices/' + p.id).update({active: state}).then(
       res => console.log(res)
     )
+  }
+
+  showModal(practice) {
+    this.modalService.createModal(PracticeModalComponent, practice);
+  }
+
+  onDelete(practice) {
+    this.fireStore.doc('practices/'+ practice.id).delete().then()
   }
 }

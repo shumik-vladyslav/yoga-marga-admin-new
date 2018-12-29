@@ -1,0 +1,26 @@
+<div class="wrap-content">
+    <div class="head-content"><p>Группы пользователей</p></div>
+    <div class="body-content">
+      <table>
+        <thead>
+          <tr>
+            <td>№</td>
+            <td>Дата</td>
+            <td>От кого</td>
+            <td>Сообщение</td>
+            <td>Действия</td> 
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let u of feedbacks; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ u.timestamp | date:'dd/MM/y' }}</td>
+            <td><a (click)="onUserClick(u.user)">{{ u.user }}</a></td>
+            <td>{{ u.msg }}</td>
+            <td><button class="blue" (click)="onDelete(u)">Удалить</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
