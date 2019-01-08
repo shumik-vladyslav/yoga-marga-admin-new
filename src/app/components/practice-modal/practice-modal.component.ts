@@ -22,6 +22,8 @@ export class PracticeModalComponent implements OnInit {
   exercisesControlsArray;
   groups$;
   yantra$;
+
+  editFlagsArray = {};
   constructor(
     private fb: FormBuilder,
     private afStorage: AngularFireStorage,
@@ -80,10 +82,28 @@ export class PracticeModalComponent implements OnInit {
   // yantra: "Праджня-янтра"
   ngOnInit() {}
 
+  deleteExercise(i) {
+    this.exercisesControlsArray.removeAt(i);
+  }
+
+  editExerc(i) {
+    this.editFlagsArray[i] =  !this.editFlagsArray[i];
+  }
+
+  insertBefore(i) {
+    this.exercisesControlsArray.insert(i, this.fb.group({
+      name: "",
+      mirror: false,
+      hasImg: false,
+      description: ""
+    }));
+  }
+
   onAddExercise() {
     this.exercisesControlsArray.push(
       this.fb.group({
         name: "",
+        mirror: false,
         hasImg: false,
         description: ""
       })

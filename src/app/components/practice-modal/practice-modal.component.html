@@ -169,20 +169,33 @@
       <div formArrayName="exercises" *ngIf="exercisesControlsArray.controls">
         <h3>Упражнения:</h3>
         <div *ngFor="let e of exercisesControlsArray.controls; let i = index">
-          <!-- <h2>Номер {{i+1}}</h2> -->
-          <div formGroupName="{{i}}">
+
+          <div [style.display]="exercisesControlsArray.length!=i+1?'block':'none'">
+              <button>{{exercisesControlsArray.controls[i].controls['name'].value}}</button>
+              <button (click)="deleteExercise(i)">Delete</button>
+              <button (click)="insertBefore(i)">InsertBefore</button>
+              <button (click)="editExerc(i)">EditExercice</button>
+
+          </div>
+          
+
+          <div formGroupName="{{i}}" [style.display]="(exercisesControlsArray.length==i+1 || editFlagsArray[i])?'block':'none'">
               <input
               type="text"
               formControlName="name"
               placeholder="Название"
               class="form-control"
             />
-            <!-- <input
-              type="text"
-              formControlName="description"
-              placeholder="Короткое описание"
-              class="form-control"
-            /> -->
+            <Label >
+                <input
+                type="checkbox"
+                formControlName="mirror"
+                placeholder="Короткое описание"
+                class="form-control"
+              />
+              На две стороны
+            </Label>
+            
             <textarea name="" id="" cols="30" rows="4" formControlName="description"
             placeholder="Короткое описание"
               class="form-control"
