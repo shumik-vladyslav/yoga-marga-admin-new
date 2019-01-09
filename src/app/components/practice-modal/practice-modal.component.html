@@ -110,7 +110,8 @@
           <div class="exercises-wrap" [style.display]="exercisesControlsArray.length!=i+1?'flex':'none'">
             <span class="exercise-item">{{exercisesControlsArray.controls[i].controls['name'].value}}</span>
             <div class="icon-wrap">
-              <span class="exercise-item" (click)="editExerc(i)"><img src="/assets/icon/svg/iterface/edit.svg"></span>
+              <span *ngIf="editFlagsArray[i]" class="exercise-item" (click)="editExerc(i)"><img src="/assets/icon/svg/iterface/save.svg"></span>
+              <span *ngIf="!editFlagsArray[i]" class="exercise-item" (click)="editExerc(i)"><img src="/assets/icon/svg/iterface/edit.svg"></span>
               <span class="exercise-item" (click)="insertBefore(i)"><img src="/assets/icon/svg/iterface/insert.svg"></span>
               <span class="exercise-item" (click)="deleteExercise(i)"><img src="/assets/icon/svg/iterface/delete.svg"></span>
             </div>
