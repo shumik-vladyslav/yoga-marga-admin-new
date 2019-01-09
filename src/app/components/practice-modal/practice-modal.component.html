@@ -1,28 +1,19 @@
-<div >
+<div>
   <!-- <div class="head-content"><p>Создание/Изменение Практики</p></div> -->
   <div>
-    
+
     <form [formGroup]="form" class="form" (click)="$event.stopPropagation()">
-        <p style="color: rgb(146, 145, 145)">Укажите сначала идентификатор практики. Латинскими буквами без спецсимволов. <br>Допускаеться дифис и подчеркивание</p>
-      <input
-        type="text"
-        formControlName="id"
-        class="form-control"
-        placeholder="Идентификатор"
-        class="form-control"
-      />
-      <input
-        type="text"
-        formControlName="name"
-        class="form-control"
-        placeholder="Название"
-        class="form-control"
-      />
-      <p>Выберите группу</p>
+      <p class="m-b-10" style="color: rgb(146, 145, 145);">Укажите сначала идентификатор практики. Латинскими буквами
+        без спецсимволов. <br>Допускаеться дифис и подчеркивание</p>
+      <input type="text" formControlName="id" class="form-control" placeholder="Идентификатор" class="form-control" />
+      <input type="text" formControlName="name" class="form-control" placeholder="Название" class="form-control" />
+      <p class="m-b-10">Выберите группу</p>
       <div class="form-control" style="text-align: left;padding-top: 8px;">
-          <app-chips [chips]="groups$ | async"  formControlName="groups"></app-chips>
+        <app-chips [chips]="groups$ | async" formControlName="groups"></app-chips>
       </div>
-      Тип
+      <p class="m-b-10">
+        Тип
+      </p>
       <select formControlName="type" placeholder="Тип">
         <option value="Утренние практики">Утренние практики</option>
         <option value="Медитативные практики">Медитативные практики</option>
@@ -30,20 +21,20 @@
         <option value="Ритуальные практики">Ритуальные практики</option>
         <option value="Ритритные практики">Ритритные практики</option>
       </select>
-      <textarea name="" id="" cols="30" rows="4" formControlName="shortDescription"
-      placeholder="Короткое описание"
-        class="form-control"
-        ></textarea>
+      <textarea name="" id="" cols="30" rows="4" formControlName="shortDescription" placeholder="Короткое описание"
+        class="form-control"></textarea>
       <!-- <input
         type="text"
         formControlName="shortDescription"
         placeholder="Короткое описание"
         class="form-control"
       /> -->
-      Янтра
+      <p class="m-b-10">
+        Янтра
+      </p>
       <select formControlName="yantra" placeholder="Тип">
-          <option [value]="y" *ngFor="let y of yantra$ | async">{{y}}</option>
-        </select>
+        <option [value]="y" *ngFor="let y of yantra$ | async">{{y}}</option>
+      </select>
       <!-- <input
         type="text"
         formControlName="yantra"
@@ -51,20 +42,20 @@
         class="form-control"
       /> -->
       <div class="form-control">
-        <label>Счетчик колличества
-          <input type="checkbox" formControlName="isAmountCounter" />
+        <label class="df ai-c jc-c">Счетчик колличества
+          <input class="m-l-5" type="checkbox" formControlName="isAmountCounter" />
         </label>
       </div>
 
       <div class="form-control">
-        <label>Максимальное достижение
-          <input type="checkbox" formControlName="isMaxAchievement" />
+        <label class="df ai-c jc-c">Максимальное достижение
+          <input class="m-l-5" type="checkbox" formControlName="isMaxAchievement" />
         </label>
       </div>
 
       <div class="form-control">
-        <label>Метроном
-          <input type="checkbox" formControlName="hasMetronome" />
+        <label class="df ai-c jc-c">Метроном
+          <input class="m-l-5" type="checkbox" formControlName="hasMetronome" />
         </label>
       </div>
 
@@ -73,24 +64,9 @@
           Загрузить иконку практики
         </button>
 
-        <input
-          type="file"
-          (change)="onUploadFile($event, 'ico')"
-          accept=".png,.jpg,.svg"
-          #selectPractIco
-          style="visibility:hidden;"
-        />
-        <progress
-          max="100"
-          [value]="practice.icoprogress | async"
-          *ngIf="practice.icoprogress"
-        ></progress>
-        <img
-          [src]="practice.ico"
-          width="128"
-          height="128"
-          *ngIf="practice.ico"
-        />
+        <input type="file" (change)="onUploadFile($event, 'ico')" accept=".png,.jpg,.svg" #selectPractIco style="visibility:hidden;" />
+        <progress max="100" [value]="practice.icoprogress | async" *ngIf="practice.icoprogress"></progress>
+        <img [src]="practice.ico" width="128" height="128" *ngIf="practice.ico" />
       </div>
 
       <div class="form-control">
@@ -98,24 +74,9 @@
           Загрузить фото практики
         </button>
 
-        <input
-          type="file"
-          (change)="onUploadFile($event, 'img')"
-          accept=".png,.jpg,.svg"
-          #selectPractImg
-          style="visibility:hidden;"
-        />
-        <progress
-          max="100"
-          [value]="practice.imgprogress | async"
-          *ngIf="practice.imgprogress"
-        ></progress>
-        <img
-          [src]="practice.img"
-          width="320"
-          height="370"
-          *ngIf="practice.img"
-        />
+        <input type="file" (change)="onUploadFile($event, 'img')" accept=".png,.jpg,.svg" #selectPractImg style="visibility:hidden;" />
+        <progress max="100" [value]="practice.imgprogress | async" *ngIf="practice.imgprogress"></progress>
+        <img [src]="practice.img" width="320" height="370" *ngIf="practice.img" />
       </div>
 
       <div class="form-control">
@@ -123,18 +84,8 @@
           Загрузить текст практики
         </button>
 
-        <input
-          type="file"
-          (change)="onUploadFile($event, 'text')"
-          accept=".pdf"
-          #selectPractText
-          style="visibility:hidden;"
-        />
-        <progress
-          max="100"
-          [value]="practice.textprogress | async"
-          *ngIf="practice.textprogress"
-        ></progress>
+        <input type="file" (change)="onUploadFile($event, 'text')" accept=".pdf" #selectPractText style="visibility:hidden;" />
+        <progress max="100" [value]="practice.textprogress | async" *ngIf="practice.textprogress"></progress>
         <br />
         <a *ngIf="practice.text" [href]="practice.text" target="_blank">Open</a>
       </div>
@@ -144,100 +95,66 @@
           Загрузить аудио практики
         </button>
 
-        <input
-          type="file"
-          (change)="onUploadFile($event, 'audio')"
-          #selectPractAudio
-          style="visibility:hidden;"
-        />
-        <progress
-          max="100"
-          [value]="practice.audioprogress | async"
-          *ngIf="practice.audioprogress"
-        ></progress>
+        <input type="file" (change)="onUploadFile($event, 'audio')" #selectPractAudio style="visibility:hidden;" />
+        <progress max="100" [value]="practice.audioprogress | async" *ngIf="practice.audioprogress"></progress>
         <br />
         <a *ngIf="practice.audio" [href]="practice.audio" target="_blank">Open</a>
       </div>
 
-      <input
-                type="file"
-                (change)="onUploadExercFile($event, 'ex_img', exerciseIdx)"
-                accept=".png,.jpg,.svg"
-                #selectPractExImg
-                style="visibility:hidden;"
-              />
+      <input type="file" (change)="onUploadExercFile($event, 'ex_img', exerciseIdx)" accept=".png,.jpg,.svg"
+        #selectPractExImg style="visibility:hidden;" />
       <div formArrayName="exercises" *ngIf="exercisesControlsArray.controls">
-        <h3>Упражнения:</h3>
+        <h3 class="m-b-10">Упражнения:</h3>
         <div *ngFor="let e of exercisesControlsArray.controls; let i = index">
 
-          <div [style.display]="exercisesControlsArray.length!=i+1?'block':'none'">
-              <span class="exercise-item">{{exercisesControlsArray.controls[i].controls['name'].value}}</span>
-              <span class="exercise-item" (click)="editExerc(i)" style="background:rgb(76, 175, 80)"><img src="/assets/icon/svg/iterface/edit.svg"></span>
-              <span class="exercise-item" (click)="insertBefore(i)" style="background:rgb(76, 175, 80)"><img src="/assets/icon/svg/iterface/insert.svg"></span>
-              <span class="exercise-item" (click)="deleteExercise(i)" style="background:rgb(255, 63, 63)"><img src="/assets/icon/svg/iterface/delete.svg"></span>
-
+          <div class="exercises-wrap" [style.display]="exercisesControlsArray.length!=i+1?'flex':'none'">
+            <span class="exercise-item">{{exercisesControlsArray.controls[i].controls['name'].value}}</span>
+            <div class="icon-wrap">
+              <span class="exercise-item" (click)="editExerc(i)"><img src="/assets/icon/svg/iterface/edit.svg"></span>
+              <span class="exercise-item" (click)="insertBefore(i)"><img src="/assets/icon/svg/iterface/insert.svg"></span>
+              <span class="exercise-item" (click)="deleteExercise(i)"><img src="/assets/icon/svg/iterface/delete.svg"></span>
+            </div>
           </div>
-          
+
 
           <div formGroupName="{{i}}" [style.display]="(exercisesControlsArray.length==i+1 || editFlagsArray[i])?'block':'none'">
-              <input
-              type="text"
-              formControlName="name"
-              placeholder="Название"
-              class="form-control"
-            />
-            <Label >
-                <input
-                type="checkbox"
-                formControlName="mirror"
-                placeholder="Короткое описание"
-                class="form-control"
-              />
+            <input type="text" formControlName="name" placeholder="Название" class="form-control" />
+            <Label class="checkbox-wrap">
+              <input type="checkbox" formControlName="mirror" placeholder="Короткое описание" class="form-control" />
               На две стороны
             </Label>
-            
-            <textarea name="" id="" cols="30" rows="4" formControlName="description"
-            placeholder="Короткое описание"
-              class="form-control"
-              ></textarea>
 
-              <div class="form-control">
-                  <button (click)="selectExerciseAudio.click()" [disabled]="!form.value.id">
-                    Загрузить аудио упражнения
-                  </button>
-          
-                  <input
-                    type="file"
-                    (change)="onUploadExercAudio($event, 'audioex', i)"
-                    #selectExerciseAudio
-                    style="visibility:hidden;"
-                  />
-                  <!-- <progress
+            <textarea name="" id="" cols="30" rows="4" formControlName="description" placeholder="Короткое описание"
+              class="form-control"></textarea>
+
+            <div class="form-control">
+              <button (click)="selectExerciseAudio.click()" [disabled]="!form.value.id">
+                Загрузить аудио упражнения
+              </button>
+
+              <input type="file" (change)="onUploadExercAudio($event, 'audioex', i)" #selectExerciseAudio style="visibility:hidden;" />
+              <!-- <progress
                     max="100"
                     [value]="practice['audioexprogress'+ i] | async"
                     *ngIf="practice['audioexprogress'+ i]"
                   ></progress> -->
-                  <br />
-                  <a *ngIf="exercisesControlsArray.at(i).controls['audio'].value" [href]="exercisesControlsArray.at(i).controls['audio'].value" target="_blank">Open</a>
-                </div>
+              <br />
+              <a *ngIf="exercisesControlsArray.at(i).controls['audio'].value" [href]="exercisesControlsArray.at(i).controls['audio'].value"
+                target="_blank">Open</a>
+            </div>
             <div class="form-control">
-                <button (click)="exerciseIdx=i;selectPractExImg.click()">
-                  Загрузить фото Упражнения
-                </button>
-                <br>
-                
-                <!-- <progress
+              <button (click)="exerciseIdx=i;selectPractExImg.click()">
+                Загрузить фото Упражнения
+              </button>
+              <br>
+
+              <!-- <progress
                   max="100"
                   [value]="practice['ex_imgprogress'+i] | async"
                   *ngIf="practice['ex_imgprogress'+i]"
                 ></progress> -->
-                <img
-                  [src]="exercisesControlsArray.at(i).controls['image'].value"
-                  width="320"
-                  height="370"
-                  *ngIf="exercisesControlsArray.at(i).controls['image'].value"
-                />
-              </div>
+              <img [src]="exercisesControlsArray.at(i).controls['image'].value" width="320" height="370" *ngIf="exercisesControlsArray.at(i).controls['image'].value" />
+            </div>
           </div>
           <br>
           <hr>

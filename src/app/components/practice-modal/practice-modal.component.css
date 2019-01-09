@@ -166,5 +166,39 @@ body {
 }
 
 .exercise-item img {
-  width: 32px;
+  width: 25px;
+  transition: all .3s;
+}
+.checkbox-wrap{
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.checkbox-wrap > input {
+  width: 20px;
+  margin: 0;
+}
+.m-b-10 {
+  margin-bottom: 10px;
+}
+.m-l-5 {
+  margin-left: 5px;
+}
+.exercises-wrap{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  
+}
+.exercises-wrap > .icon-wrap {
+  display: flex;
+  align-items: center;
+}
+.exercises-wrap > .icon-wrap > .exercise-item {
+  display: block;
+  margin-left: 10px;
+  cursor: pointer
+}
+.exercises-wrap > .icon-wrap > .exercise-item:hover > img{
+  transform: scale(1.15);
 }

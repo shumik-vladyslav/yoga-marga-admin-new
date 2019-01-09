@@ -38,3 +38,12 @@
     text-decoration: none;
     cursor: pointer;
 }
+.df {
+    display: flex;
+}
+.ai-c {
+    align-items: center;
+}
+.jc-c {
+    justify-content: center;
+}
