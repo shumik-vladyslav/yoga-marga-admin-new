@@ -1,6 +1,6 @@
 import { FullModalService } from "./../full-modal/full-modal.service";
 import { FullModalComponent } from "./../full-modal/full-modal.component";
-import { Validators, FormArray } from "@angular/forms";
+import { Validators, FormArray, AbstractControl } from "@angular/forms";
 import { FormBuilder } from "@angular/forms";
 import { FormGroup } from "@angular/forms";
 import { Component, OnInit } from "@angular/core";
@@ -65,7 +65,10 @@ export class PracticeModalComponent implements OnInit {
           this.fb.group({
             name: ex.name,
             hasImg: ex.hasImg,
-            description: ex.description
+            description: ex.description,
+            image : ex.image,
+            audio: ex.audio,
+            mirror: ex.mirror
           })
         );
       }
@@ -92,55 +95,70 @@ export class PracticeModalComponent implements OnInit {
 
   insertBefore(i) {
     this.exercisesControlsArray.insert(i, this.fb.group({
-      name: "",
+      name: '',
       mirror: false,
       hasImg: false,
-      description: ""
+      description: '',
+      image : '',
+      audio: null
     }));
   }
 
   onAddExercise() {
     this.exercisesControlsArray.push(
       this.fb.group({
-        name: "",
+        name: '',
         mirror: false,
         hasImg: false,
-        description: ""
+        description: '',
+        image : '',
+        audio: null
       })
     );
   }
 
   exerciseIdx;
-  onUploadExercFile(event, resourceName) {
+  onUploadExercFile(event, resourceName, i) {
     console.log("Upload exerciseId", this.exerciseIdx);
+    const exerciseIdx = Math.random().toString(36).substring(2);
 
-    // create a reference to the storage bucket location
-
-    // let ref = this.afStorage.ref(this.exerciseIdx + '.jpg');
     let ref = this.afStorage.ref(
-      `practices/${this.form.value.id}/${this.exerciseIdx}.jpg`
+      `practices/${this.form.value.id}/${exerciseIdx}.jpg`
     );
-    console.log("File upload", this.exerciseIdx + ".jpg");
 
-    // the put method creates an AngularFireUploadTask
-    // and kicks off the upload
     const uploadTask: AngularFireUploadTask = ref.put(event.target.files[0]);
 
     this.practice[
-      resourceName + "progress" + this.exerciseIdx
+      resourceName + "progress" + exerciseIdx
     ] = uploadTask.percentageChanges();
 
     uploadTask.then(snap => {
       snap.ref.getDownloadURL().then(downloadURL => {
-        this.practice[resourceName + this.exerciseIdx] = downloadURL;
-        console.log('asdasd');
-        
-        // if (!this.practice.exercises) {
-        //   this.practice.exercises = []
-        // }
-        // this.practice.exercises[this.exerciseIdx] = { hasImg : true }
-        this.form.value.exercises[this.exerciseIdx].hasImg = true;
-        delete this.practice[resourceName + "progress" + this.exerciseIdx];
+        this.exercisesControlsArray.at(i).controls['image'].patchValue(downloadURL);
+        this.exercisesControlsArray.at(i).controls['hasImg'].patchValue(true);
+        delete this.practice[resourceName + "progress" + exerciseIdx];
+      });
+    });
+  }
+
+  onUploadExercAudio(event, resourceName, i) {
+    const exerciseIdx = Math.random().toString(36).substring(2);
+    console.log("Upload exerciseId", exerciseIdx);
+
+    let ref = this.afStorage.ref(
+      `practices/${this.form.value.id}/${exerciseIdx}.mp3`
+    );
+
+    const uploadTask: AngularFireUploadTask = ref.put(event.target.files[0]);
+
+    this.practice[
+      resourceName + "progress" + exerciseIdx
+    ] = uploadTask.percentageChanges();
+
+    uploadTask.then(snap => {
+      snap.ref.getDownloadURL().then(downloadURL => {
+        this.exercisesControlsArray.at(i).controls['audio'].patchValue(downloadURL);
+        delete this.practice[resourceName + "progress" + exerciseIdx];
       });
     });
   }

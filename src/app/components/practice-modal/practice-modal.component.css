@@ -158,3 +158,13 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;      
 }
+
+/* float:left;margin:0 10px; */
+.exercise-item {
+  display: inline-block;
+  
+}
+
+.exercise-item img {
+  width: 32px;
+}

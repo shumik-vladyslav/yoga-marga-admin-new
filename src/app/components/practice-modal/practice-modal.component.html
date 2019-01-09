@@ -161,7 +161,7 @@
 
       <input
                 type="file"
-                (change)="onUploadExercFile($event, 'ex_img')"
+                (change)="onUploadExercFile($event, 'ex_img', exerciseIdx)"
                 accept=".png,.jpg,.svg"
                 #selectPractExImg
                 style="visibility:hidden;"
@@ -171,10 +171,10 @@
         <div *ngFor="let e of exercisesControlsArray.controls; let i = index">
 
           <div [style.display]="exercisesControlsArray.length!=i+1?'block':'none'">
-              <button>{{exercisesControlsArray.controls[i].controls['name'].value}}</button>
-              <button (click)="deleteExercise(i)">Delete</button>
-              <button (click)="insertBefore(i)">InsertBefore</button>
-              <button (click)="editExerc(i)">EditExercice</button>
+              <span class="exercise-item">{{exercisesControlsArray.controls[i].controls['name'].value}}</span>
+              <span class="exercise-item" (click)="editExerc(i)" style="background:rgb(76, 175, 80)"><img src="/assets/icon/svg/iterface/edit.svg"></span>
+              <span class="exercise-item" (click)="insertBefore(i)" style="background:rgb(76, 175, 80)"><img src="/assets/icon/svg/iterface/insert.svg"></span>
+              <span class="exercise-item" (click)="deleteExercise(i)" style="background:rgb(255, 63, 63)"><img src="/assets/icon/svg/iterface/delete.svg"></span>
 
           </div>
           
@@ -200,22 +200,42 @@
             placeholder="Короткое описание"
               class="form-control"
               ></textarea>
+
+              <div class="form-control">
+                  <button (click)="selectExerciseAudio.click()" [disabled]="!form.value.id">
+                    Загрузить аудио упражнения
+                  </button>
+          
+                  <input
+                    type="file"
+                    (change)="onUploadExercAudio($event, 'audioex', i)"
+                    #selectExerciseAudio
+                    style="visibility:hidden;"
+                  />
+                  <!-- <progress
+                    max="100"
+                    [value]="practice['audioexprogress'+ i] | async"
+                    *ngIf="practice['audioexprogress'+ i]"
+                  ></progress> -->
+                  <br />
+                  <a *ngIf="exercisesControlsArray.at(i).controls['audio'].value" [href]="exercisesControlsArray.at(i).controls['audio'].value" target="_blank">Open</a>
+                </div>
             <div class="form-control">
                 <button (click)="exerciseIdx=i;selectPractExImg.click()">
                   Загрузить фото Упражнения
                 </button>
                 <br>
                 
-                <progress
+                <!-- <progress
                   max="100"
                   [value]="practice['ex_imgprogress'+i] | async"
                   *ngIf="practice['ex_imgprogress'+i]"
-                ></progress>
+                ></progress> -->
                 <img
-                  [src]="practice['ex_img'+i]"
+                  [src]="exercisesControlsArray.at(i).controls['image'].value"
                   width="320"
                   height="370"
-                  *ngIf="practice['ex_img'+i]"
+                  *ngIf="exercisesControlsArray.at(i).controls['image'].value"
                 />
               </div>
           </div>
