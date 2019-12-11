@@ -39,6 +39,7 @@ export class PracticeModalComponent implements OnInit {
     const data = this.modalService.data;
     this.groups$.subscribe(gr => console.log('groups', gr))
     this.form = this.fb.group({
+      isBm: false,
       id: ["", Validators.required],
       name: ["", Validators.required],
       groups: [],
@@ -63,16 +64,17 @@ export class PracticeModalComponent implements OnInit {
       for (const ex of data.exercises) {
         this.exercisesControlsArray.push(
           this.fb.group({
+            isBm: false,
             name: ex.name,
             hasImg: ex.hasImg,
             description: ex.description,
             image : ex.image,
             audio: ex.audio,
-            mirror: ex.mirror
+            mirror: ex.mirror,
+            exerciseDuration: this.transformExerciseDuration(ex.exerciseDuration, 'milli2minutes')
           })
         );
       }
-
     }
   }
 
@@ -83,7 +85,8 @@ export class PracticeModalComponent implements OnInit {
   // template: 2
   // type: "Медитативные практики"
   // yantra: "Праджня-янтра"
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
   deleteExercise(i) {
     this.exercisesControlsArray.removeAt(i);
@@ -95,24 +98,28 @@ export class PracticeModalComponent implements OnInit {
 
   insertBefore(i) {
     this.exercisesControlsArray.insert(i, this.fb.group({
+      isBm: false,
       name: '',
       mirror: false,
       hasImg: false,
       description: '',
       image : '',
-      audio: null
+      audio: null,
+      exerciseDuration: 0
     }));
   }
 
   onAddExercise() {
     this.exercisesControlsArray.push(
       this.fb.group({
+        isBm: false,
         name: '',
         mirror: false,
         hasImg: false,
         description: '',
         image : '',
-        audio: null
+        audio: null,
+        exerciseDuration: 0
       })
     );
   }
@@ -205,7 +212,13 @@ export class PracticeModalComponent implements OnInit {
 
   onSave(practice) {
     const res = {};
-    Object.assign(practice, this.form.value);
+    const value = this.form.value;
+    value.exercises = value.exercises.map(e => {
+      e.exerciseDuration = this.transformExerciseDuration(e.exerciseDuration, 'minutes2milli');
+      return e;
+    });
+    
+    Object.assign(practice, value);
 
     if ( !practice.active ) {
       practice.active = false;
@@ -219,5 +232,14 @@ export class PracticeModalComponent implements OnInit {
         this.modalService.destroyModal();
       })
       .catch(err => alert(err));
+  }
+
+  // convert milliseconds to minutes and vice versa
+  transformExerciseDuration(value , direction = 'minutes2milli') {
+    if (!value) return null;
+    if (direction === 'minutes2milli') {
+      return value*60*1000;
+    }
+    return Math.floor(value/1000/60);
   }
 }
