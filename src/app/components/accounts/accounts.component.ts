@@ -26,7 +26,7 @@ export class AccountsComponent implements OnInit, OnDestroy {
     ),take(1));
     const subs = this.fireStore.collection('users').valueChanges().subscribe(
       users => {
-        this.users = users;
+        this.users = users.sort((x:any,y:any) =>  (x.active === y.active)? 0 : x.active? 1 : -1);
         console.log('users', users);
       }
     )

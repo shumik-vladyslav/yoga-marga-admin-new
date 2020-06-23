@@ -3,10 +3,10 @@
   <div>
 
     <form [formGroup]="form" class="form" (click)="$event.stopPropagation()">
-      <label> 
-          <input formControlName="isBm" class="apple-switch" type="checkbox"> БМ
+      <label>
+        <input formControlName="isBm" class="apple-switch" type="checkbox"> БМ
       </label>
-      
+
       <p class="m-b-10" style="color: rgb(146, 145, 145);">Укажите сначала идентификатор практики. Латинскими буквами
         без спецсимволов. <br>Допускаеться дифис и подчеркивание</p>
       <input type="text" formControlName="id" class="form-control" placeholder="Идентификатор" class="form-control" />
@@ -27,41 +27,31 @@
       </select>
       <textarea name="" id="" cols="30" rows="4" formControlName="shortDescription" placeholder="Короткое описание"
         class="form-control"></textarea>
-      <!-- <input
-        type="text"
-        formControlName="shortDescription"
-        placeholder="Короткое описание"
-        class="form-control"
-      /> -->
-      <p class="m-b-10">
-        Янтра
-      </p>
-      <select formControlName="yantra" placeholder="Тип">
-        <option [value]="y" *ngFor="let y of yantra$ | async">{{y}}</option>
-      </select>
-      <!-- <input
-        type="text"
-        formControlName="yantra"
-        placeholder="Янтра"
-        class="form-control"
-      /> -->
-      <div class="form-control">
-        <label class="df ai-c jc-c">Счетчик колличества
-          <input class="m-l-5" type="checkbox" formControlName="isAmountCounter" />
-        </label>
+      <div *ngIf="!form.value.isBm">
+        <p class="m-b-10">
+          Янтра
+        </p>
+        <select formControlName="yantra" placeholder="Тип">
+          <option [value]="y" *ngFor="let y of yantra$ | async">{{y}}</option>
+        </select>
+        <div class="form-control">
+          <label class="df ai-c jc-c">Счетчик колличества
+            <input class="m-l-5" type="checkbox" formControlName="hasAmountCounter" />
+          </label>
+        </div>
+
+        <div class="form-control">
+          <label class="df ai-c jc-c">Максимальное достижение
+            <input class="m-l-5" type="checkbox" formControlName="hasMaxAchievement" />
+          </label>
+        </div>
+        <div class="form-control">
+          <label class="df ai-c jc-c">Метроном
+            <input class="m-l-5" type="checkbox" formControlName="hasMetronome" />
+          </label>
+        </div>
       </div>
 
-      <div class="form-control">
-        <label class="df ai-c jc-c">Максимальное достижение
-          <input class="m-l-5" type="checkbox" formControlName="isMaxAchievement" />
-        </label>
-      </div>
-
-      <div class="form-control">
-        <label class="df ai-c jc-c">Метроном
-          <input class="m-l-5" type="checkbox" formControlName="hasMetronome" />
-        </label>
-      </div>
 
       <div class="form-control">
         <button (click)="selectPractIco.click()" [disabled]="!form.value.id">
@@ -95,9 +85,11 @@
         <progress max="100" [value]="practice.textprogress | async" *ngIf="practice.textprogress"></progress>
         <br />
         <a *ngIf="practice.text" [href]="practice.text" target="_blank">Open</a>
+
       </div>
       <!-- accept=".pdf" -->
-      <div class="form-control">
+
+      <div class="form-control" *ngIf="!form.value.isBm">
         <button (click)="selectPractAudio.click()" [disabled]="!form.value.id">
           Загрузить аудио практики
         </button>
@@ -105,12 +97,57 @@
         <input type="file" (change)="onUploadFile($event, 'audio')" #selectPractAudio style="visibility:hidden;" />
         <progress max="100" [value]="practice.audioprogress | async" *ngIf="practice.audioprogress"></progress>
         <br />
-        <a *ngIf="practice.audio" [href]="practice.audio" target="_blank">Open</a>
+        <a *ngIf="practice.audio && !(practice.audio | isArray)" [href]="practice.audio" target="_blank">Open</a>
+        <div *ngIf="practice.audio | isArray">
+          <a  *ngFor="let a of practice.audio" [href]="a" target="_blank" style="display: block;">Open</a>
+        </div>
       </div>
 
       <input type="file" (change)="onUploadExercFile($event, 'ex_img', exerciseIdx)" accept=".png,.jpg,.svg"
         #selectPractExImg style="visibility:hidden;" />
-      <div formArrayName="exercises" *ngIf="exercisesControlsArray.controls">
+
+      <div formArrayName="bmtracks" *ngIf="form.value.isBm && bmtracksControlsArray.controls">
+        <h3 class="m-b-10">Баджаны:</h3>
+        <div *ngFor="let e of bmtracksControlsArray.controls; let i = index">
+
+          <div class="exercises-wrap" [style.display]="bmtracksControlsArray.length!=i+1?'flex':'none'">
+            <span class="exercise-item">{{bmtracksControlsArray.controls[i].controls['name'].value}}</span>
+            <div class="icon-wrap">
+              <span *ngIf="editFlagsArray[i]" class="exercise-item" (click)="editExerc(i)"><img
+                  src="/assets/icon/svg/iterface/save.svg"></span>
+              <span *ngIf="!editFlagsArray[i]" class="exercise-item" (click)="editExerc(i)"><img
+                  src="/assets/icon/svg/iterface/edit.svg"></span>
+              <span class="exercise-item" (click)="insertbmtrackBefore(i)"><img
+                  src="/assets/icon/svg/iterface/insert.svg"></span>
+              <span class="exercise-item" (click)="deleteBmTack(i)"><img
+                  src="/assets/icon/svg/iterface/delete.svg"></span>
+            </div>
+          </div>
+
+
+          <div formGroupName="{{i}}"
+            [style.display]="(bmtracksControlsArray.length==i+1 || editFlagsArray[i])?'block':'none'">
+            <input type="text" formControlName="name" placeholder="Название" class="form-control" />
+
+            <div class="form-control">
+              <button (click)="selectExerciseAudio.click()" [disabled]="!form.value.id">
+                Загрузить баджан
+              </button>
+
+              <input type="file" (change)="onUploadBmTrack($event, 'audioex', i)" #selectExerciseAudio
+                style="visibility:hidden;" />
+              <br />
+              <a *ngIf="bmtracksControlsArray.at(i).controls['url'].value"
+                [href]="bmtracksControlsArray.at(i).controls['url'].value" target="_blank">Open</a>
+            </div>
+          </div>
+          <br>
+          <hr>
+          <br>
+        </div>
+      </div>
+
+      <div formArrayName="exercises" *ngIf="!form.value.isBm && exercisesControlsArray.controls">
         <h3 class="m-b-10">Упражнения:</h3>
         <div *ngFor="let e of exercisesControlsArray.controls; let i = index">
 
@@ -137,7 +174,8 @@
               На две стороны
             </Label>
 
-            <input type="number" formControlName="exerciseDuration" placeholder="Длительность в минутах" class="form-control" />
+            <input type="number" formControlName="exerciseDuration" placeholder="Длительность в секундах"
+              class="form-control" />
             <textarea name="" id="" cols="30" rows="4" formControlName="description" placeholder="Короткое описание"
               class="form-control"></textarea>
 
@@ -148,11 +186,6 @@
 
               <input type="file" (change)="onUploadExercAudio($event, 'audioex', i)" #selectExerciseAudio
                 style="visibility:hidden;" />
-              <!-- <progress
-                    max="100"
-                    [value]="practice['audioexprogress'+ i] | async"
-                    *ngIf="practice['audioexprogress'+ i]"
-                  ></progress> -->
               <br />
               <a *ngIf="exercisesControlsArray.at(i).controls['audio'].value"
                 [href]="exercisesControlsArray.at(i).controls['audio'].value" target="_blank">Open</a>
@@ -172,9 +205,12 @@
         </div>
       </div>
 
-      <button (click)="onAddExercise()" [disabled]="!form.value.id">Добавить упражнение</button>
+      <button (click)="onAddExercise()" [disabled]="!form.value.id" *ngIf="!form.value.isBm">Добавить
+        упражнение</button>
+      <button (click)="onAddBmTack()" [disabled]="!form.value.id" *ngIf="form.value.isBm">Добавить Баджан</button>
       <br>
       <br>
+
       <button [disabled]="!form.valid" (click)="onSave(practice)">Сохранить Практику</button>
     </form>
   </div>

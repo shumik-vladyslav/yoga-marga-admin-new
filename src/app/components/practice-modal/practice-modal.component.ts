@@ -10,7 +10,7 @@ import {
 } from "@angular/fire/storage";
 import { AngularFirestore } from "@angular/fire/firestore";
 import { Observable } from "rxjs";
-import {map} from "rxjs/operators"
+import { map } from "rxjs/operators"
 @Component({
   selector: "app-practice-modal",
   templateUrl: "./practice-modal.component.html",
@@ -20,6 +20,7 @@ export class PracticeModalComponent implements OnInit {
   practice: any = {};
   form: FormGroup;
   exercisesControlsArray;
+  bmtracksControlsArray;
   groups$;
   yantra$;
 
@@ -31,10 +32,10 @@ export class PracticeModalComponent implements OnInit {
     private modalService: FullModalService
   ) {
     this.groups$ = this.fireStore.collection("groups").valueChanges().pipe(map(
-      gr => gr.map( (gr:any) => gr.name)
+      gr => gr.map((gr: any) => gr.name)
     ));
     this.yantra$ = this.fireStore.collection("yantra").valueChanges().pipe(map(
-      gr => gr.map( (gr:any) => gr.name)
+      gr => gr.map((gr: any) => gr.name)
     ));
     const data = this.modalService.data;
     this.groups$.subscribe(gr => console.log('groups', gr))
@@ -46,40 +47,55 @@ export class PracticeModalComponent implements OnInit {
       type: ["", Validators.required],
       shortDescription: "",
       yantra: "",
-      isAmountCounter: false,
-      isMaxAchievement: false,
+      hasAmountCounter: false,
+      hasMaxAchievement: false,
       hasMetronome: false,
-      exercises: this.fb.array([])
+      exercises: this.fb.array([]),
+      bmtracks: this.fb.array([])
     });
 
     this.exercisesControlsArray = this.form.controls["exercises"] as FormArray;
+    this.bmtracksControlsArray = this.form.controls["bmtracks"] as FormArray;
 
     if (data) {
       this.practice = data;
       this.form.patchValue(data);
 
       console.log(data);
-      
+
+      if (data.isBm) {
+        for (const tr of data.bmtracks) {
+          this.bmtracksControlsArray.push(
+            this.fb.group({
+              name: tr.name,
+              url: tr.url
+            })
+          );
+        }
+        return;
+      }
+
       if (!data.exercises) return;
       for (const ex of data.exercises) {
         this.exercisesControlsArray.push(
           this.fb.group({
-            isBm: false,
             name: ex.name,
             hasImg: ex.hasImg,
             description: ex.description,
-            image : ex.image,
+            image: ex.image,
             audio: ex.audio,
             mirror: ex.mirror,
-            exerciseDuration: this.transformExerciseDuration(ex.exerciseDuration, 'milli2minutes')
+            exerciseDuration: this.transformExerciseDuration(ex.exerciseDuration, 'M->S')
           })
         );
       }
+
+
     }
   }
 
   // id: "om"
-  // isAmountCounter: true
+  // hasAmountCounter: true
   // name: "Мантра Ом"
   // shortDescription: "<p>Брахман выше всего, а Ом – Его имя. </p> <p>Поэтому следует почитать звук Ом. Ом – это все. Ом – это имя или символ Бога, Ишвары, Брахмана. Ом – это ваше истинное имя. Ом покрывает все три части человеческого опыта. За всеми воспринимаемыми словами стоит Ом. Весь воспринимаемый чувствами мир возник из звука Ом. В нем мир существует, и в нем растворяется. Мантра Ом включает в себя буквы «а», «у», «м».</p>"
   // template: 2
@@ -93,7 +109,7 @@ export class PracticeModalComponent implements OnInit {
   }
 
   editExerc(i) {
-    this.editFlagsArray[i] =  !this.editFlagsArray[i];
+    this.editFlagsArray[i] = !this.editFlagsArray[i];
   }
 
   insertBefore(i) {
@@ -103,7 +119,7 @@ export class PracticeModalComponent implements OnInit {
       mirror: false,
       hasImg: false,
       description: '',
-      image : '',
+      image: '',
       audio: null,
       exerciseDuration: 0
     }));
@@ -117,11 +133,58 @@ export class PracticeModalComponent implements OnInit {
         mirror: false,
         hasImg: false,
         description: '',
-        image : '',
+        image: '',
         audio: null,
         exerciseDuration: 0
       })
     );
+  }
+
+
+  deleteBmTack(i) {
+    this.bmtracksControlsArray.removeAt(i);
+  }
+
+
+  insertbmtrackBefore(i) {
+    this.bmtracksControlsArray.insert(i, this.fb.group({
+      name: '',
+      url: null
+    }));
+  }
+
+  onAddBmTack() {
+    this.bmtracksControlsArray.push(
+      this.fb.group({
+        name: '',
+        url: null
+      })
+    );
+  }
+
+  onUploadBmTrack(event, resourceName, i) {
+    const exerciseIdx = Math.random().toString(36).substring(2);
+    console.log("Upload exerciseId", exerciseIdx);
+
+    let ref = this.afStorage.ref(
+      `practices/${this.form.value.id}/${resourceName + exerciseIdx}.mp3`
+    );
+
+    const uploadTask: AngularFireUploadTask = ref.put(event.target.files[0]);
+
+    this.practice[
+      resourceName + "progress" + exerciseIdx
+    ] = uploadTask.percentageChanges();
+
+    uploadTask.then(snap => {
+      snap.ref.getDownloadURL().then(downloadURL => {
+
+        // TODO add to result value
+        this.bmtracksControlsArray.at(i).controls['url'].patchValue(downloadURL);
+
+        delete this.practice[resourceName + "progress" + exerciseIdx];
+      });
+    });
   }
 
   exerciseIdx;
@@ -204,7 +267,14 @@ export class PracticeModalComponent implements OnInit {
 
     uploadTask.then(snap => {
       snap.ref.getDownloadURL().then(downloadURL => {
-        this.practice[resourceName] = downloadURL;
+        if (resourceName == 'audio') {
+          if (!this.practice.audio) {
+            this.practice.audio = [];
+          }
+          this.practice.audio.push(downloadURL)
+        } else {
+          this.practice[resourceName] = downloadURL;
+        }
         delete this.practice[resourceName + "progress"];
       });
     });
@@ -214,13 +284,13 @@ export class PracticeModalComponent implements OnInit {
     const res = {};
     const value = this.form.value;
     value.exercises = value.exercises.map(e => {
-      e.exerciseDuration = this.transformExerciseDuration(e.exerciseDuration, 'minutes2milli');
+      e.exerciseDuration = this.transformExerciseDuration(e.exerciseDuration, 'S->M');
       return e;
     });
-    
+
     Object.assign(practice, value);
 
-    if ( !practice.active ) {
+    if (!practice.active) {
       practice.active = false;
     }
 
@@ -235,11 +305,13 @@ export class PracticeModalComponent implements OnInit {
   }
 
   // convert milliseconds to minutes and vice versa
-  transformExerciseDuration(value , direction = 'minutes2milli') {
+  // S->M secconds to milliseconds
+  // M->S milliseconds to secconds
+  transformExerciseDuration(value, direction = 'S->M') {
     if (!value) return null;
-    if (direction === 'minutes2milli') {
-      return value*60*1000;
+    if (direction === 'S->M') {
+      return value * 1000;
     }
-    return Math.floor(value/1000/60);
+    return Math.floor(value / 1000);
   }
 }

@@ -22,12 +22,16 @@ import { PracticeModalComponent } from './components/practice-modal/practice-mod
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { GroupsComponent } from './components/groups/groups.component';
 import { NotificationComponent } from './components/notification/notification.component';
+import { IsArrayPipe } from 'src/pipes/is-array.pipe';
 @NgModule({
-  declarations: [AppComponent, MenuLayoutComponent, AccountsComponent, SignInComponent,ChipsComponent, PracticesComponent, PracticeModalComponent, GroupsComponent, NotificationComponent],
+  declarations: [AppComponent, MenuLayoutComponent, 
+    AccountsComponent, SignInComponent, ChipsComponent, 
+    PracticesComponent, PracticeModalComponent, GroupsComponent, 
+    NotificationComponent, IsArrayPipe],
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    RouterModule.forRoot(routes, { useHash: true }), 
+    RouterModule.forRoot(routes, { useHash: true }),
     BrowserModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
@@ -35,13 +39,13 @@ import { NotificationComponent } from './components/notification/notification.co
     AngularFireStorageModule,
     FullModalModule,
     BrowserAnimationsModule,
-    
+
   ],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents:[PracticeModalComponent],
+  entryComponents: [PracticeModalComponent],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA
-]
+  ]
 })
-export class AppModule {}
+export class AppModule { }

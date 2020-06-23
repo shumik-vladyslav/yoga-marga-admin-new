@@ -14,24 +14,24 @@ export class NotificationComponent implements OnInit {
 
   ngOnInit() {
     this.users = this.fireStore.collection('users').valueChanges().subscribe (
-      us => this.users = us
+      us => this.users = us 
     );
     this.fireStore.collection('feedbacks').snapshotChanges().subscribe(
       (snap) => {
-        this.feedbacks = snap.map(docChAct => {
+         let tmp = snap.map(docChAct => {
           const res:any = docChAct.payload.doc.data();
           res.id = docChAct.payload.doc.id;
           console.log(res);
           return res;
         })
+        this.feedbacks = tmp.sort((x:any,y:any) =>  (x.timestamp === y.timestamp)? 0 : x.timestamp < y.timestamp? 1 : -1);
       }
     );
   }
 
   onDelete(notificatoon) {
     console.log(notificatoon);
-    
-    this.fireStore.doc('feedbacks/'+ notificatoon.id).delete().then()
+    this.fireStore.doc('feedbacks/'+ notificatoon.id).delete().then();
   }
 
   onUserClick(email) {

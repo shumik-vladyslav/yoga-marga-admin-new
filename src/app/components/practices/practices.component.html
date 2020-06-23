@@ -11,7 +11,7 @@
         <!--
           ico: "/assets/icon/svg/main-page/om.svg"
           id: "om"
-          isAmountCounter: true
+          hasAmountCounter: true
           name: "Мантра Ом"
           shortDescription: "<p>Брахман выше всего, а Ом – Его имя. </p> <p>Поэтому следует почитать звук Ом. Ом – это все. Ом – это имя или символ Бога, Ишвары, Брахмана. Ом – это ваше истинное имя. Ом покрывает все три части человеческого опыта. За всеми воспринимаемыми словами стоит Ом. Весь воспринимаемый чувствами мир возник из звука Ом. В нем мир существует, и в нем растворяется. Мантра Ом включает в себя буквы «а», «у», «м».</p>"
           template: 2
@@ -38,11 +38,11 @@
           <td>{{ p.groups }}</td>
           <td
             style="text-align: center"
-            [innerHtml]="p.isAmountCounter ? '&#x2714;' : ''"
+            [innerHtml]="p.hasAmountCounter ? '&#x2714;' : ''"
           ></td>
           <td
             style="text-align: center"
-            [innerHtml]="p.isMaxAchievement ? '&#x2714;' : ''"
+            [innerHtml]="p.hasMaxAchievement ? '&#x2714;' : ''"
           ></td>
           <td>{{ p.updated_date }}</td>
           <td>
